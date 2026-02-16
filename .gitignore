@@ -1,0 +1,32 @@
+
+# EN: Python & environment
+# FR: Python & environnement
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.DS_Store
+*.log
+*.egg-info/
+.cache/
+.coverage
+htmlcov/
+
+# EN: IDE/editor
+# FR: IDE/éditeur
+.vscode/
+.idea/
+
+# EN: Build artifacts
+# FR: Artéfacts de build
+build/
+dist/
+
+# EN: Terraform local state
+# FR: État local Terraform
+deploy/terraform/.terraform/
+deploy/terraform/.terraform.lock.hcl
+deploy/terraform/terraform.tfstate*
