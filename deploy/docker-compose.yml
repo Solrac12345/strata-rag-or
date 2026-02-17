@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    working_dir: /app
+    environment:
+      - APP_ENV=local
+      - LOG_LEVEL=info
+      - AWS_REGION=us-east-1
+      - USE_IN_MEMORY_DB=true
+      - BEDROCK_USE_REAL=false
+      - EMBEDDING_DIM=256
+      - RETRIEVER_TOP_K=3
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../:/app
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
