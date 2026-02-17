@@ -1,16 +1,12 @@
-# EN: Orchestrate endpoint (stub for now; real orchestration in next steps)
-# FR: Endpoint Orchestrate (stub pour l'instant; orchestration réelle à venir)
+# EN: Orchestrate endpoint wired to the multi-agent orchestrator.
+# FR: Endpoint Orchestrate connecté à l'orchestrateur multi-agents.
 from fastapi import APIRouter
 from api.schemas.orchestrate import OrchestrateRequest, OrchestrateResponse
+from app.orchestrator.orchestrator import get_orchestrator
 
 router = APIRouter()
 
 @router.post("/orchestrate", response_model=OrchestrateResponse)
 def orchestrate(req: OrchestrateRequest):
-    # EN: Placeholder response; will be replaced by multi-agent orchestrator
-    # FR: Réponse provisoire; sera remplacée par l'orchestrateur multi-agents
-    return {
-        "answer": f"(stub) You asked: {req.query}",
-        "routed_agent": "qa",
-        "sources": [],
-    }
+    orch = get_orchestrator()
+    return orch.orchestrate(req.query)
