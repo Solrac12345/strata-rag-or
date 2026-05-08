@@ -39,7 +39,46 @@ tests/            pytest suite
 pip install -r requirements.txt
 uvicorn api.main:app --reload
 ```
+```in another terminal 
+Terminal Bash
 
+curl http://127.0.0.1:8000/health
+
+For POST to /orchestrate:
+
+curl -X POST http://127.0.0.1:8000/orchestrate \
+  -H "Content-Type: application/json" \
+  -d '{"query":"What is RAG?"}'
+
+And /embed:
+
+curl -X POST http://127.0.0.1:8000/embed \
+  -H "Content-Type: application/json" \
+  -d '{"text":"hello world"}'
+
+```
+
+```
+Check API is running:
+
+curl http://localhost:8080/health
+Should return: {"status":"ok","env":"local"}
+
+Ask a question:
+
+curl -X POST http://localhost:8080/orchestrate \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What is machine learning?"}'
+
+This will return:
+
+{
+  "answer": "...",
+  "routed_agent": "qa_agent",
+  "sources": ["source1", "source2"]
+}
+
+```
 Everything runs with stubs by default (fake embeddings, fake LLM, in-memory vector store).
 Set `BEDROCK_USE_REAL=true` to use real AWS Bedrock models — no code changes needed.
 
