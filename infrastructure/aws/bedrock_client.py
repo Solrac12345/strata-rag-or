@@ -92,7 +92,26 @@ class BedrockClient:
 
         # EN: Produce a short, natural-sounding answer
         # FR: Produire une réponse brève et naturelle
+
+        answer_text = _get_stub_answer(question)
         return (
             f"(Stub LLM) Based on the retrieved context, a concise answer to '{question}' is: "
-            f"RAG retrieves relevant documents and uses them to ground the model's response."
+            f"{answer_text}"
         )
+
+
+# EN: Helper function for smart stub answers (keyword-based)
+# FR: Fonction auxiliaire pour les réponses de stub intelligent (basées sur mots-clés)
+def _get_stub_answer(question: str) -> str:
+    q = question.lower()
+    if "machine learning" in q:
+        return "Machine learning is a subset of AI that enables systems to learn patterns from data without explicit programming."
+    elif "rag" in q or "retrieval" in q or "retriever" in q:
+        return "RAG (Retrieval-Augmented Generation) combines document retrieval with LLM generation to ground answers in evidence."
+    elif "multi-agent" in q or "orchestration" in q or "routing" in q:
+        return "Multi-agent orchestration routes queries to specialized agents (QA, summarization, etc.) for modular, scalable AI systems."
+    elif "embed" in q or "vector" in q or "embedding" in q:
+        return "Embeddings convert text into numerical vectors that capture semantic meaning for similarity search."
+    else:
+        # EN/FR: Fallback for unmatched questions
+        return "RAG retrieves relevant documents and uses them to ground the model's response."

@@ -68,6 +68,19 @@ And /embed:
 rag-embed '{"text":"hello world"}' | python -m json.tool
 
 ```
+Ask a question:
+
+rag-query '{"query":"What is machine learning?"}' | python -m json.tool
+
+rag-query '{"query":"What is RAG?"}' | python -m json.tool
+
+This will return:
+
+{
+  "answer": "...",
+  "routed_agent": "qa_agent",
+  "sources": ["source1", "source2"]
+}
 
 ```
 Check API is running:
@@ -94,6 +107,12 @@ This will return:
   "routed_agent": "qa_agent",
   "sources": ["source1", "source2"]
 }
+
+```
+orchestrator.py (The brain)
+routing_agent.py (The router)
+bedrock_client.py (The stub logic you just fixed)
+```
 
 ```
 Everything runs with stubs by default (fake embeddings, fake LLM, in-memory vector store).
