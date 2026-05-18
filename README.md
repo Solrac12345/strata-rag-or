@@ -3,6 +3,21 @@
 Multi-agent RAG (Retrieval-Augmented Generation) system built on FastAPI and AWS.
 
 Receives a user question, routes it to the right AI agent, retrieves relevant documents, and generates a grounded answer using an LLM.
+i need to push these changes
+## Problem & Solution
+
+### 🔍 The Problem
+- **Hallucination & Unverifiable Outputs:** Standard LLMs generate plausible but ungrounded responses, making them unsuitable for production workflows that require accuracy, auditability, and source traceability.
+- **Cloud-Blocked Development:** Relying on live AI services (e.g., AWS Bedrock) during local development slows iteration, increases costs, and makes testing non-deterministic.
+- **Rigid AI Pipelines:** Single-model architectures can't scale to diverse tasks (QA, summarization, classification) without major refactoring or breaking existing contracts.
+- **Deployment & Compliance Gaps:** Missing API contract validation, environment parity, and request tracing lead to brittle CI/CD pipelines and audit risks in regulated environments.
+
+### ✅ The Solution
+`strata-rag-or` is a **modular, production-ready RAG orchestrator** engineered to eliminate these bottlenecks:
+- **Grounded Retrieval:** Every response is anchored to retrieved documents, with explicit source IDs for full traceability and hallucination reduction.
+- **Stub-First Development:** Deterministic, offline mocks for embeddings and LLMs enable fast, cost-free local iteration. Switch to real AWS Bedrock with zero code changes via `BEDROCK_USE_REAL=true`.
+- **Extensible Multi-Agent Routing:** A clean `RoutingAgent → TaskAgent` architecture allows new capabilities (e.g., summarization, validation, translation) to be added without modifying the core pipeline.
+- **Engineering Rigor:** FastAPI + Pydantic contracts, Docker/Terraform deployment, CI/CD gating, and structured logging ensure reliability, reproducibility, and seamless promotion from development to production.
 
 ## Flow
 
@@ -46,29 +61,31 @@ curl http://127.0.0.1:8000/health
 
 For POST to /orchestrate:
 
-curl -X POST http://127.0.0.1:8000/orchestrate \
-  -H "Content-Type: application/json" \
-  -d '{"query":"What is RAG?"}'
+rag-query '{"query":"What is RAG?"}' | python -m json.tool
 
 And /embed:
 
-curl -X POST http://127.0.0.1:8000/embed \
-  -H "Content-Type: application/json" \
-  -d '{"text":"hello world"}'
+rag-embed '{"text":"hello world"}' | python -m json.tool
 
 ```
 
 ```
 Check API is running:
 
+# If you changed requirements.txt or Dockerfile:
+docker compose -f deploy/docker-compose.yml up --build
+
+# Otherwise just restart:
+docker compose -f deploy/docker-compose.yml restart api
+
 curl http://localhost:8080/health
 Should return: {"status":"ok","env":"local"}
 
 Ask a question:
 
-curl -X POST http://localhost:8080/orchestrate \
+curl -s -X POST http://localhost:8080/orchestrate \
   -H "Content-Type: application/json" \
-  -d '{"query": "What is machine learning?"}'
+  -d '{"query": "What is machine learning?"}' | python -m json.tool
 
 This will return:
 
@@ -86,3 +103,7 @@ Set `BEDROCK_USE_REAL=true` to use real AWS Bedrock models — no code changes n
 
 - **Local**: `uvicorn` or `docker-compose`
 - **AWS**: Lambda + API Gateway + DynamoDB, defined in Terraform, CI via GitHub Actions
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

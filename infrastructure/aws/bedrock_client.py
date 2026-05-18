@@ -94,5 +94,5 @@ class BedrockClient:
         # FR: Produire une réponse brève et naturelle
         return (
             f"(Stub LLM) Based on the retrieved context, a concise answer to '{question}' is: "
-            f"RAG retrieves relevant documents and uses them to ground the model’s response."
+            f"RAG retrieves relevant documents and uses them to ground the model's response."
         )
